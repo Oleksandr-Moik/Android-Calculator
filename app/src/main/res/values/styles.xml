@@ -27,4 +27,21 @@
         <item name="android:background">@color/addtionalFunctionsBack</item>
     </style>
 
+    <style name="Clear" parent="simpleFunctions">
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+    <style name="InputArea" parent="android:Widget.TextView">
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#E95F5F</item>
+        <item name="android:background">#6CFFAB</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">2sp</item>
+    </style>
+
+    <style name="AppBackground">
+        <item name="android:background">#FCCABB</item>
+    </style>
+
 </resources>
