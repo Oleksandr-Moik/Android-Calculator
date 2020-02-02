@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Calculator</string>
     <string name="add_func">Additional functions</string>
-    <string name="sqrt_button">SQRT</string>
-    <string name="power_button">POWER</string>
+    <string name="sqrt_button" translatable="false">SQRT</string>
+    <string name="power_button" translatable="false">POWER</string>
     <string name="clear">Clear</string>
     <string name="area_cleared">Area cleared</string>
+    <string name="copy">Copy</string>
 </resources>

@@ -3,16 +3,42 @@
     android:orientation="vertical"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:text="0"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pole"
-        android:textAlignment="viewStart"
-        android:textSize="20sp"
-        android:textStyle="normal|bold" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/pole"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="25sp"
+            android:textStyle="normal|bold" />
+
+        <Button
+            android:id="@+id/button_clear"
+            style="@style/simpleFunctions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AC" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/colorPrimary" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -20,46 +46,52 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/button1"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="2"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1" />
+
+        <Button
             android:id="@+id/button2"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="3"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2" />
+
+        <Button
             android:id="@+id/button3"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="*"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="3" />
+
+        <Button
             android:id="@+id/button_multiple"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="SIN"
+            style="@style/simpleFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="*" />
+
+        <Button
             android:id="@+id/button_sin"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="@string/sqrt_button"
+            style="@style/addtionalFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SIN" />
+
+        <Button
             android:id="@+id/button_sqrt"
-            android:layout_weight="1" />
+            style="@style/addtionalFunctions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/sqrt_button" />
 
     </LinearLayout>
 
@@ -69,46 +101,52 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/button4"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="5"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="4" />
+
+        <Button
             android:id="@+id/button5"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="6"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="5" />
+
+        <Button
             android:id="@+id/button6"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="/"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="6" />
+
+        <Button
             android:id="@+id/button_div"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="COS"
+            style="@style/simpleFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="/" />
+
+        <Button
             android:id="@+id/button_cos"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="@string/power_button"
+            style="@style/addtionalFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="COS" />
+
+        <Button
             android:id="@+id/button_pow"
-            android:layout_weight="1" />
+            style="@style/addtionalFunctions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/power_button" />
     </LinearLayout>
 
     <LinearLayout
@@ -117,46 +155,52 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/button7"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="8"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="7" />
+
+        <Button
             android:id="@+id/button8"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="9"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="8" />
+
+        <Button
             android:id="@+id/button9"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="+"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="9" />
+
+        <Button
             android:id="@+id/button_add"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="TAN"
+            style="@style/simpleFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+" />
+
+        <Button
             android:id="@+id/button_tan"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="LOG"
+            style="@style/addtionalFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TAN" />
+
+        <Button
             android:id="@+id/button_log"
-            android:layout_weight="1" />
+            style="@style/addtionalFunctions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="LOG" />
     </LinearLayout>
 
     <LinearLayout
@@ -165,46 +209,52 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="."
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/button_dot"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="0"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="." />
+
+        <Button
             android:id="@+id/button0"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="="
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0" />
+
+        <Button
             android:id="@+id/button_result"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="-"
+            style="@style/NumberButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="=" />
+
+        <Button
             android:id="@+id/button_sub"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="CTAN"
+            style="@style/simpleFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+
+        <Button
             android:id="@+id/button_ctan"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="%"
+            style="@style/addtionalFunctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CTAN" />
+
+        <Button
             android:id="@+id/button_procent"
-            android:layout_weight="1" />
+            style="@style/addtionalFunctions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="%" />
     </LinearLayout>
 
     <LinearLayout

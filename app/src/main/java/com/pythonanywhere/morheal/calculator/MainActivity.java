@@ -1,7 +1,11 @@
 package com.pythonanywhere.morheal.calculator;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,11 +14,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private double result = 0;
+    private double first = 0;
+    private double second = 0;
     private TextView pole;
 
     @Override
@@ -23,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         pole = (TextView) findViewById(R.id.pole);
+        registerForContextMenu(pole);
         if (result != 0) pole.setText(String.valueOf(result));
         else pole.setText("");
-
 
         setButtonsClick();
     }
@@ -51,77 +59,74 @@ public class MainActivity extends AppCompatActivity {
                 setLocale("uk");
                 return true;
             case R.id.clear:
-                pole.setText("");
-                result = 0;
-                Toast.makeText(getBaseContext(), R.string.area_cleared, Toast.LENGTH_SHORT).show();
-                return true;
+                return clearAll();
             default:
                 return super.onOptionsItemSelected(item);
         }
 
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        switch (v.getId()){
+            case R.id.pole:
+                menu.add(0, 1, 0, getString(R.string.clear));
+                menu.add(0, 2, 0, getString(R.string.copy));
+                break;
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case 1:
+                clearAll();
+                return true;
+            case 2:
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("result", pole.getText());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(),"OK", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
+    }
+
     private void setButtonsClick() {
-        findViewById(R.id.button0).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button_clear).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                NumberClick(v);
+            public boolean onLongClick(View v) {
+                return clearAll();
             }
         });
-        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button_clear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NumberClick(v);
+                Delete();
             }
         });
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button8).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
-        findViewById(R.id.button9).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NumberClick(v);
-            }
-        });
+
+        List<View> list = new ArrayList<>();
+        list.add(findViewById(R.id.button0));
+        list.add(findViewById(R.id.button1));
+        list.add(findViewById(R.id.button2));
+        list.add(findViewById(R.id.button3));
+        list.add(findViewById(R.id.button4));
+        list.add(findViewById(R.id.button5));
+        list.add(findViewById(R.id.button6));
+        list.add(findViewById(R.id.button7));
+        list.add(findViewById(R.id.button8));
+        list.add(findViewById(R.id.button9));
+        for (View view : list) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NumberClick(v);
+                }
+            });
+        }
+        list.clear();
+
 
         findViewById(R.id.button_dot).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,28 +136,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.button_result).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PrintResult();
-            }
-        });
+        list.add(findViewById(R.id.button_result));
+        list.add(findViewById(R.id.button_add));
+        list.add(findViewById(R.id.button_sub));
+        list.add(findViewById(R.id.button_multiple));
+        list.add(findViewById(R.id.button_div));
+        list.add(findViewById(R.id.button_pow));
+        list.add(findViewById(R.id.button_procent));
+        for (View view : list) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CalculateWithTwoArgs(v);
+                }
+            });
+        }
+        list.clear();
 
-        findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddClick();
-            }
-        });
-        findViewById(R.id.button_sub).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SubtractClick();
-            }
-        });
-
-//        findViewById()
-
+        list.add(findViewById(R.id.button_sin));
+        list.add(findViewById(R.id.button_cos));
+        list.add(findViewById(R.id.button_tan));
+        list.add(findViewById(R.id.button_ctan));
+        list.add(findViewById(R.id.button_log));
+        list.add(findViewById(R.id.button_sqrt));
+        for (View view : list) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CalculateWithOneArg(v);
+                }
+            });
+        }
     }
 
     private void setLocale(String mLang) {
@@ -165,40 +179,118 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    private boolean clearAll() {
+        pole.setText("");
+        result = 0;
+        first = 0;
+        second = 0;
+        last_operation="";
+        Toast.makeText(getBaseContext(), R.string.area_cleared, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    private void Delete() {
+        String old = pole.getText().toString();
+        switch (old.length()) {
+            case 0:
+                return;
+            case 1:
+                pole.setText("");
+                return;
+            default: {
+                pole.setText(old.substring(0, old.length() - 1));
+                return;
+            }
+        }
+
+    }
+
     private void NumberClick(View view) {
-        TextView pole = (TextView) findViewById(R.id.pole);
         pole.append(((Button) view).getText());
     }
 
-    private void PrintResult() {
-        pole.setText(String.valueOf(result));
+    private String last_operation = "";
+
+    private void CalculateWithTwoArgs(View v) {
+        try {
+            double input = Double.parseDouble(pole.getText().toString());
+            String operation = ((Button) v).getText().toString();
+            pole.setText("");
+            switch (operation) {
+                case "+":
+                case "-":
+                case "*":
+                case "/":
+                case "POWER":
+                case "%":
+                    first = input;
+                    result = input;
+                    last_operation = operation;
+                    break;
+                case "=": {
+                    second = input;
+                    switch (last_operation) {
+                        case "+":
+                            result = first + second;
+                            break;
+                        case "-":
+                            result = first - second;
+                            break;
+                        case "*":
+                            result = first * second;
+                            break;
+                        case "/":
+                            result = first / second;
+                            break;
+                        case "POWER":
+                            result = Math.pow(first, second);
+                            break;
+                        case "%":
+                            result = second / first * 100;
+                            break;
+                        case "":
+                            return;
+                    }
+                    last_operation="";
+                    first=result;
+                    pole.setText(String.valueOf(result));
+                    break;
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void AddClick() {
-        double input = Double.parseDouble(pole.getText().toString());
-        pole.setText("");
-        result += input;
-    }
-
-    private void SubtractClick() {
-        double input = Double.parseDouble(pole.getText().toString());
-        pole.setText("");
-        result -= input;
-    }
-
-    private void MultipleClick() {
-        double input = Double.parseDouble(pole.getText().toString());
-        pole.setText("");
-        if (result != 0) result *= input;
-        else result = input;
-    }
-
-    private void DivideClick() {
-        double input = Double.parseDouble(pole.getText().toString());
-        pole.setText("");
-        if (result != 0) {
-            result /= input;
-        } else result = input;
+    private void CalculateWithOneArg(View v) {
+        try {
+            double input = Double.parseDouble(pole.getText().toString());
+            String operation = ((Button) v).getText().toString();
+            switch (operation) {
+                case "SIN":
+                    result = Math.sin(input);
+                    break;
+                case "COS":
+                    result = Math.cos(input);
+                    break;
+                case "TAN":
+                    result = Math.tan(input);
+                    break;
+                case "CTAN":
+                    result = 1 / Math.tan(input);
+                    break;
+                case "SQRT":
+                    result = Math.sqrt(input);
+                    break;
+                case "LOG":
+                    result = Math.log(input);
+                    break;
+            }
+            pole.setText(String.valueOf(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

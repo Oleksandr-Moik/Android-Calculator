@@ -2,8 +2,7 @@
 <resources>
     <string name="app_name">Калькулятор</string>
     <string name="add_func">Додаткові функції</string>
-    <string name="power_button">СТЕПІНЬ</string>
-    <string name="sqrt_button">КОРІНЬ</string>
     <string name="clear">Очистити</string>
     <string name="area_cleared">Поле очищено</string>
+    <string name="copy">Копіювати</string>
 </resources>

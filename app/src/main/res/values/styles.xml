@@ -8,4 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Buttons" parent="android:Widget.Button">
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:layout_margin">2dp</item>
+    </style>
+
+    <style name="NumberButtons" parent="Buttons">
+        <item name="android:background">@color/numbersBack</item>
+    </style>
+
+    <style name="simpleFunctions" parent="Buttons">
+        <item name="android:background">@color/simpleFunctionsBack</item>
+    </style>
+
+    <style name="addtionalFunctions" parent="Buttons">
+        <item name="android:background">@color/addtionalFunctionsBack</item>
+    </style>
+
 </resources>
