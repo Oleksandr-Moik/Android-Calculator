@@ -5,4 +5,6 @@
     <string name="clear">Очистити</string>
     <string name="area_cleared">Поле очищено</string>
     <string name="copy">Копіювати</string>
+    <string name="divByZero">Не можливо ділити на 0</string>
+    <string name="NaNmessage">Помилка обчислень</string>
 </resources>

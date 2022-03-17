@@ -2,7 +2,9 @@ package com.pythonanywhere.morheal.calculator;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -14,6 +16,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private double result = 0;
     private double first = 0;
     private double second = 0;
+    private File langFile;
     private TextView pole;
 
     @Override
@@ -30,12 +39,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        InitComponents();
+        setButtonsClick();
+        if (savedInstanceState != null) {
+            result = savedInstanceState.getDouble("result");
+            first = savedInstanceState.getDouble("first");
+            second = savedInstanceState.getDouble("second");
+            pole.setText(savedInstanceState.getString("input"));
+        }else{
+            langFile = new File("lang.bin");
+            try {
+                if(!langFile.exists())langFile.createNewFile();
+                BufferedReader br = new BufferedReader(new FileReader(langFile));
+                String st;
+                while ((st = br.readLine()) != null) ;
+                setLocale(st);
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void InitComponents() {
         pole = (TextView) findViewById(R.id.pole);
         registerForContextMenu(pole);
         if (result != 0) pole.setText(String.valueOf(result));
         else pole.setText("");
-
-        setButtonsClick();
     }
 
     @Override
@@ -58,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Встановлено українську мову!", Toast.LENGTH_LONG).show();
                 setLocale("uk");
                 return true;
-            case R.id.clear:
-                return clearAll();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -68,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.pole:
                 menu.add(0, 1, 0, getString(R.string.clear));
                 menu.add(0, 2, 0, getString(R.string.copy));
@@ -78,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case 1:
                 clearAll();
                 return true;
@@ -86,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("result", pole.getText());
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(getApplicationContext(),"OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return false;
@@ -131,8 +159,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_dot).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean contain_dot = pole.getText().toString().contains(".");
-                if (!contain_dot) pole.append(".");
+                AddDot();
             }
         });
 
@@ -142,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
         list.add(findViewById(R.id.button_multiple));
         list.add(findViewById(R.id.button_div));
         list.add(findViewById(R.id.button_pow));
-        list.add(findViewById(R.id.button_procent));
         for (View view : list) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(findViewById(R.id.button_ctan));
         list.add(findViewById(R.id.button_log));
         list.add(findViewById(R.id.button_sqrt));
+        list.add(findViewById(R.id.button_procent));
         for (View view : list) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,8 +202,24 @@ public class MainActivity extends AppCompatActivity {
         android.content.res.Configuration config = new android.content.res.Configuration();
         config.locale = mNewLocale;
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        try {
+            FileWriter wr = new FileWriter(langFile);
+            wr.write(config.locale.toString());
+            wr.close();
+        } catch (IOException e) {
+        }
+        Intent intent = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(intent);
+    }
 
-        setContentView(R.layout.activity_main);
+    private void AddDot() {
+        if (pole.getText().length() == 0) {
+            pole.append("0.");
+        } else {
+            boolean contain_dot = pole.getText().toString().contains(".");
+            if (!contain_dot) pole.append(".");
+        }
     }
 
     private boolean clearAll() {
@@ -184,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         result = 0;
         first = 0;
         second = 0;
-        last_operation="";
+        last_operation = "";
         Toast.makeText(getBaseContext(), R.string.area_cleared, Toast.LENGTH_SHORT).show();
         return true;
     }
@@ -193,9 +236,8 @@ public class MainActivity extends AppCompatActivity {
         String old = pole.getText().toString();
         switch (old.length()) {
             case 0:
-                return;
             case 1:
-                pole.setText("");
+                pole.setText("0");
                 return;
             default: {
                 pole.setText(old.substring(0, old.length() - 1));
@@ -206,53 +248,73 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void NumberClick(View view) {
-        pole.append(((Button) view).getText());
+        String number = ((Button) view).getText().toString();
+        String input = pole.getText().toString();
+        if (input.length() != 0) {
+            if (input.contains("0.") && input.charAt(0) == '0') {
+                input = input.substring(0, input.length());
+            } else if (input.charAt(0) == '0') {
+                input = input.substring(1, input.length());
+            }
+        }
+        pole.setText(input + number);
     }
 
     private String last_operation = "";
-
     private void CalculateWithTwoArgs(View v) {
         try {
-            double input = Double.parseDouble(pole.getText().toString());
+            String input = pole.getText().toString();
             String operation = ((Button) v).getText().toString();
             pole.setText("");
             switch (operation) {
                 case "+":
                 case "-":
+                    if (input.length() == 0) {
+                        first = 0;
+                        pole.setText("-");
+                        last_operation = operation;
+                        break;
+                    }
                 case "*":
                 case "/":
                 case "POWER":
-                case "%":
-                    first = input;
-                    result = input;
+                    first = Double.parseDouble(input);
+                    result = first;
                     last_operation = operation;
                     break;
+
                 case "=": {
-                    second = input;
+                    second = Double.parseDouble(input);
                     switch (last_operation) {
                         case "+":
                             result = first + second;
                             break;
                         case "-":
-                            result = first - second;
+                            if (first == 0) {
+                                result = second;
+                            } else {
+                                result = first - second;
+                            }
                             break;
                         case "*":
                             result = first * second;
                             break;
                         case "/":
-                            result = first / second;
+                            if (second != 0) {
+                                result = first / second;
+                            } else {
+                                clearAll();
+                                Toast.makeText(this, getString(R.string.divByZero), Toast.LENGTH_SHORT).show();
+                            }
                             break;
                         case "POWER":
                             result = Math.pow(first, second);
                             break;
-                        case "%":
-                            result = second / first * 100;
-                            break;
                         case "":
                             return;
                     }
-                    last_operation="";
-                    first=result;
+                    last_operation = "";
+                    first = result;
                     pole.setText(String.valueOf(result));
                     break;
                 }
@@ -265,32 +327,48 @@ public class MainActivity extends AppCompatActivity {
 
     private void CalculateWithOneArg(View v) {
         try {
-            double input = Double.parseDouble(pole.getText().toString());
+            String input = pole.getText().toString();
             String operation = ((Button) v).getText().toString();
             switch (operation) {
                 case "SIN":
-                    result = Math.sin(input);
+                    result = Math.sin(Double.parseDouble(input));
                     break;
                 case "COS":
-                    result = Math.cos(input);
+                    result = Math.cos(Double.parseDouble(input));
                     break;
                 case "TAN":
-                    result = Math.tan(input);
+                    result = Math.tan(Double.parseDouble(input));
                     break;
                 case "CTAN":
-                    result = 1 / Math.tan(input);
+                    result = 1 / Math.tan(Double.parseDouble(input));
                     break;
                 case "SQRT":
-                    result = Math.sqrt(input);
+                    result = Math.sqrt(Double.parseDouble(input));
                     break;
                 case "LOG":
-                    result = Math.log(input);
+                    result = Math.log(Double.parseDouble(input));
+                    break;
+                case "%":
+                    result = Double.parseDouble(input) * 0.01;
                     break;
             }
-            pole.setText(String.valueOf(result));
+            if (String.valueOf(result) == "NaN") {
+                clearAll();
+                Toast.makeText(this, getString(R.string.NaNmessage), Toast.LENGTH_SHORT).show();
+            } else {
+                pole.setText(String.valueOf(result));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putDouble("result", result);
+        outState.putDouble("first", first);
+        outState.putDouble("second", second);
+        outState.putString("input", pole.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
 }

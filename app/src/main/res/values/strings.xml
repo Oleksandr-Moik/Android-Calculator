@@ -6,4 +6,6 @@
     <string name="clear">Clear</string>
     <string name="area_cleared">Area cleared</string>
     <string name="copy">Copy</string>
+    <string name="divByZero">Can`t divide on 0</string>
+    <string name="NaNmessage">Calculation error</string>
 </resources>
